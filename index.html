@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API Request Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    form {
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    label, input, button {
+      display: block;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .response {
+      margin-top: 20px;
+      border: 1px solid #ddd;
+      padding: 10px;
+      background-color: #f9f9f9;
+    }
+  </style>
+</head>
+<body>
+  <h1>Send URL to API</h1>
+  <form id="apiForm">
+    <label for="url">Enter URL:</label>
+    <input type="text" id="url" name="url" required>
+    <button type="submit">Send Request</button>
+  </form>
+  <div class="response" id="response"></div>
+
+  <script>
+    document.getElementById('apiForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const url = document.getElementById('url').value;
+      const responseDiv = document.getElementById('response');
+
+      try {
+        const res = await fetch('api_request.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: new URLSearchParams({ url: url })
+        });
+        const data = await res.json();
+        responseDiv.innerText = JSON.stringify(data, null, 2);
+      } catch (error) {
+        responseDiv.innerText = `Error: ${error.message}`;
+      }
+    });
+  </script>
+</body>
+</html>
